@@ -13,10 +13,9 @@ import 'antd/dist/antd.css';
 
 const mapStateToProps = (state) => {
     return {
-        //appLoaded: state.common.appLoaded,
-        //appName: state.common.appName,
         currentUser: state.mainstate.currentUser,
-        //redirectTo: state.common.redirectTo
+        //appLoaded: state.mainstate.appLoaded,
+        //redirectTo: state.mainstate.redirectTo
     }};
 
 const mapDispatchToProps = dispatch => ({
@@ -30,7 +29,6 @@ class App extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.redirectTo) {
-            // this.context.router.replace(nextProps.redirectTo);
             store.dispatch(push(nextProps.redirectTo));
             this.props.onRedirect();
         }
@@ -71,27 +69,4 @@ class App extends React.Component {
     }
 }
 
-// App.contextTypes = {
-//   router: PropTypes.object.isRequired
-// };
-
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
-
-//<Route exact path="/" component={Home}/>
-
-// const App = () => {
-//     return (
-//         <div className="app-container">
-//             <NavBar currentUser={this.props.currentUser} />
-//             <div className="form-container">
-//                 <Switch>
-//                     <Route path="/login" component={Login} />
-//                     <Route path="/signup" component={Signup} />
-//                     <Redirect from="*" to="/" />
-//                 </Switch>
-//             </div>
-//         </div>
-//     );
-// };
-//export default App;

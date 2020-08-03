@@ -1,10 +1,7 @@
 import React from 'react';
 //import userService from '../../services/userService';
 import { connect } from 'react-redux';
-import {
-    HOME_PAGE_LOADED,
-    HOME_PAGE_UNLOADED,
-} from '../../actionTypes';
+import { HOME_PAGE_LOADED, HOME_PAGE_UNLOADED } from '../../actionTypes';
 
 const mapStateToProps = (state) => ({
     ...state.home,

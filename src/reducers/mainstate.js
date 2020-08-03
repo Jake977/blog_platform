@@ -35,8 +35,6 @@ export default (state = defaultState, action) => {
                 token: action.error ? null : action.payload.user.token,
                 currentUser: action.error ? null : action.payload.user
             };
-        //case DELETE_ARTICLE:
-            //return { ...state, redirectTo: '/' };
         case HOME_PAGE_UNLOADED:
         case LOGIN_PAGE_UNLOADED:
         case SIGNUP_PAGE_UNLOADED:
