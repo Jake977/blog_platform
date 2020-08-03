@@ -1,4 +1,3 @@
-//import superagentPromise from 'superagent-promise';
 import superagent from 'superagent';
 
 const API_URL = 'https://conduit.productionready.io/api';
@@ -33,43 +32,7 @@ const Authorization = {
         requests.put('/user', { user })
 };
 
-
 export default {
     Authorization,
     setToken: _token => { token = _token; }
 };
-
-// const handleResponse = (response) => {
-//     return response.text()
-//         .then(text => {
-//             const data = text && JSON.parse(text);
-//             if (!response.ok) {
-//                 const error = (data && data.message) || response.statusText;
-//                 return Promise.reject(error);
-//             }
-//             return data;
-//         });
-// };
-//
-// const createUser = (url, body) => {
-//     const requestOptions = {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify(body)
-//     };
-//     return fetch(url, requestOptions)
-//         .then(handleResponse);
-// };
-//
-// const getAll = (url) =>  {
-//     const requestOptions = {
-//         method: 'GET'
-//     };
-//     return fetch(url, requestOptions)
-//         .then(handleResponse);
-// };
-//
-// export const userService = {
-//     getAll,
-//     createUser,
-// };
