@@ -15,5 +15,4 @@ render(
         </ConnectedRouter>
     </Provider>,
     document.getElementById('root')
-
 );

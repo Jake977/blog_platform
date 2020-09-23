@@ -1,5 +1,5 @@
 import React from 'react';
-//import userService from '../../services/userService';
+import ArticlesList from '../Articles/ArticlesList';
 import { connect } from 'react-redux';
 import { HOME_PAGE_LOADED, HOME_PAGE_UNLOADED } from '../../actionTypes';
 
@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class Home extends React.Component {
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.props.onLoad();
     }
 
@@ -26,8 +26,12 @@ class Home extends React.Component {
 
     render() {
         return (
-            <div className="home-page">
-                Home Page
+            <div className="articlesContainer">
+                ArticlesList
+                {/*<ArticlesList*/}
+                {/*    articles={props.articles}*/}
+                {/*    articlesCounter={props.articlesCounter}*/}
+                {/*/>*/}
             </div>
         );
     }

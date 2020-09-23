@@ -8,7 +8,6 @@ import {
 } from '../actionTypes';
 
 export default (state = {}, action) => {
-    console.log('action: ', action);
     switch (action.type) {
         case LOGIN:
         case SIGNUP:

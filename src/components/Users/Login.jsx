@@ -1,11 +1,22 @@
 import { Link } from 'react-router-dom';
-//import ListErrors from './ListErrors';
+import ErrorsList from '../ErrorsList/ErrorsList';
 import React from 'react';
 import { connect } from 'react-redux';
 import { UPDATE_FIELD_AUTH, LOGIN, LOGIN_PAGE_UNLOADED } from '../../actionTypes';
 import userService from "../../services/userService";
+import { Form, Input, Button } from 'antd';
+import './loginForm.scss';
 
-const mapStateToProps = (state) => ({ ...state.auth });
+const mapStateToProps = (state) => ({ ...state.authorization });
+
+const formItemLayout = {
+    labelCol: {span: 24},
+    wrapperCol: {span: 24}
+};
+
+const formSingleItemLayout = {
+    wrapperCol: {span: 24, offset: 0}
+};
 
 const mapDispatchToProps = dispatch => ({
     onChangeEmail: (value) =>
@@ -13,19 +24,17 @@ const mapDispatchToProps = dispatch => ({
     onChangePassword: (value) =>
         dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
     onSubmit: (email, password) =>
-        dispatch({ type: LOGIN, payload: userService.Authorization.login(email, password) }),
+        dispatch({ type: LOGIN, payload: userService.authorization.login(email, password) }),
     onUnload: () =>
         dispatch({ type: LOGIN_PAGE_UNLOADED })
 });
 
-//<ListErrors errors={this.props.errors} />
 class Login extends React.Component {
     constructor(props) {
         super(props);
         this.changeEmail = (e) => this.props.onChangeEmail(e.target.value);
         this.changePassword = (e) => this.props.onChangePassword(e.target.value);
         this.submitForm = (email, password) => (e) => {
-            e.preventDefault();
             this.props.onSubmit(email, password);
         };
     }
@@ -37,52 +46,64 @@ class Login extends React.Component {
     render() {
         const { email, password } = this.props;
         return (
-            <div className="auth-page">
-                <div className="container page">
-                    <div className="row">
-
-                        <div className="col-md-6 offset-md-3 col-xs-12">
-                            <h1 className="text-xs-center">Sign In</h1>
-                            <p className="text-xs-center">
-                                <Link to="/signup">
-                                    Need an account?
-                                </Link>
-                            </p>
-
-                            <form onSubmit={this.submitForm(email, password)}>
-                                <fieldset>
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control form-control-lg"
-                                            type="email"
-                                            placeholder="Email"
-                                            value={email}
-                                            onChange={this.changeEmail} />
-                                    </fieldset>
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control form-control-lg"
-                                            type="password"
-                                            placeholder="Password"
-                                            value={password}
-                                            onChange={this.changePassword} />
-                                    </fieldset>
-                                    <button
-                                        className="btn btn-lg btn-primary pull-xs-right"
-                                        type="submit"
-                                        disabled={this.props.inProgress}>
-                                        Sign in
-                                    </button>
-                                </fieldset>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
+            <div className="login-form">
+                <div className="login-form__title">Log In</div>
+                <ErrorsList errors={this.props.errors} />
+                <Form
+                    {...formItemLayout}
+                    onFinish={this.submitForm(email, password)}
+                >
+                    <Form.Item
+                        label="E-mail"
+                        name="email"
+                        rules={[
+                            {
+                                type: 'email',
+                                message: 'The input is not valid E-mail!',
+                            },
+                            {
+                                required: true,
+                                message: 'Please input your E-mail!',
+                            },
+                        ]}
+                    >
+                        <Input
+                            value={email}
+                            onChange={this.changeEmail}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                            },
+                        ]}
+                    >
+                        <Input.Password
+                            value={password}
+                            onChange={this.changePassword}
+                        />
+                    </Form.Item>
+                    <Form.Item {...formSingleItemLayout}>
+                        <Button
+                            className="login-form__btn"
+                            type="primary"
+                            htmlType="submit"
+                            disabled={this.props.inProgress}
+                        >
+                            Log in
+                        </Button>
+                    </Form.Item>
+                </Form>
+                <p className="login-form__tailText">
+                    Don't have an account? <Link to="/signup">Sign Up.</Link>
+                </p>
             </div>
         );
     }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
-

@@ -1,27 +1,39 @@
 import { Link } from 'react-router-dom';
-//import ListErrors from './ListErrors';
+import ErrorsList from '../ErrorsList/ErrorsList';
 import React from 'react';
 import userService from '../../services/userService';
 import { connect } from 'react-redux';
+import './loginForm.scss';
+
+
 import {
     UPDATE_FIELD_AUTH,
     SIGNUP,
     SIGNUP_PAGE_UNLOADED
 } from '../../actionTypes';
 
-//<ListErrors errors={this.props.errors} />
+import { Form, Input, Button } from 'antd';
 
-const mapStateToProps = state => ({ ...state.auth });
+const formItemLayout = {
+    labelCol: { span: 24},
+    wrapperCol: {span: 24}
+};
 
-const mapDispatchToProps = dispatch => ({
+const formSingleItemLayout = {
+    wrapperCol: { span: 24, offset: 0 }
+};
+
+const mapStateToProps = (state) => ({ ...state.authorization });
+
+const mapDispatchToProps = (dispatch) => ({
+    onChangeUsername: (value) =>
+        dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
     onChangeEmail: (value) =>
         dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
     onChangePassword: (value) =>
         dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
-    onChangeUsername: (value) =>
-        dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
     onSubmit: (username, email, password) => {
-        const payload = userService.Authorization.register(username, email, password);
+        const payload = userService.authorization.signup(username, email, password);
         dispatch({ type: SIGNUP, payload })
     },
     onUnload: () =>
@@ -35,7 +47,6 @@ class Register extends React.Component {
         this.changePassword = (e) => this.props.onChangePassword(e.target.value);
         this.changeUsername = (e) => this.props.onChangeUsername(e.target.value);
         this.submitForm = (username, email, password) => (e) => {
-            e.preventDefault();
             this.props.onSubmit(username, email, password);
         }
     }
@@ -45,62 +56,78 @@ class Register extends React.Component {
     }
 
     render() {
-        const {email, password, username } = this.props;
+        const {email, password, username, errors } = this.props;
         return (
-            <div className="auth-page">
-                <div className="container page">
-                    <div className="row">
-
-                        <div className="col-md-6 offset-md-3 col-xs-12">
-                            <h1 className="text-xs-center">Sign Up</h1>
-                            <p className="text-xs-center">
-                                <Link to="/login">
-                                    log in
-                                </Link>
-                            </p>
-
-                            <form onSubmit={this.submitForm(username, email, password)}>
-                                <fieldset>
-
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control form-control-lg"
-                                            type="text"
-                                            placeholder="Username"
-                                            value={this.props.username}
-                                            onChange={this.changeUsername} />
-                                    </fieldset>
-
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control form-control-lg"
-                                            type="email"
-                                            placeholder="Email"
-                                            value={this.props.email}
-                                            onChange={this.changeEmail} />
-                                    </fieldset>
-
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control form-control-lg"
-                                            type="password"
-                                            placeholder="Password"
-                                            value={this.props.password}
-                                            onChange={this.changePassword} />
-                                    </fieldset>
-
-                                    <button
-                                        className="btn btn-lg btn-primary pull-xs-right"
-                                        type="submit"
-                                        disabled={this.props.inProgress}>
-                                        Sign up
-                                    </button>
-
-                                </fieldset>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+            <div className="login-form">
+                <div className="login-form__title">Sign Up</div>
+                <ErrorsList errors={errors} />
+                <Form
+                    {...formItemLayout}
+                    onFinish={this.submitForm(username, email, password)}
+                >
+                    <Form.Item
+                        label="Username"
+                        name="username"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your username!',
+                            },
+                        ]}
+                    >
+                        <Input
+                            value={username}
+                            onChange={this.changeUsername}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label="E-mail"
+                        name="email"
+                        rules={[
+                            {
+                                type: 'email',
+                                message: 'The input is not valid E-mail!',
+                            },
+                            {
+                                required: true,
+                                message: 'Please input your E-mail!',
+                            },
+                        ]}
+                    >
+                        <Input
+                            value={email}
+                            onChange={this.changeEmail}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                            },
+                        ]}
+                    >
+                        <Input.Password
+                            value={password}
+                            onChange={this.changePassword}
+                        />
+                    </Form.Item>
+                    <Form.Item {...formSingleItemLayout}>
+                        <Button
+                            className="login-form__btn"
+                            type="primary"
+                            htmlType="submit"
+                            disabled={this.props.inProgress}
+                        >
+                            Sign Up
+                        </Button>
+                    </Form.Item>
+                </Form>
+                <p className="login-form__tailText">
+                    Already have an account? <Link to="/login">Log In.</Link>
+                </p>
             </div>
         );
     }

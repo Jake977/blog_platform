@@ -10,12 +10,13 @@ import Signup from '../Users/Signup';
 import { store } from '../../store';
 import { push } from 'react-router-redux';
 import 'antd/dist/antd.css';
+import '../../styles.scss';
 
 const mapStateToProps = (state) => {
     return {
         currentUser: state.mainstate.currentUser,
-        //appLoaded: state.mainstate.appLoaded,
-        //redirectTo: state.mainstate.redirectTo
+        appLoaded: state.mainstate.appLoaded,
+        redirectTo: state.mainstate.redirectTo
     }};
 
 const mapDispatchToProps = dispatch => ({
@@ -27,29 +28,28 @@ const mapDispatchToProps = dispatch => ({
 
 class App extends React.Component {
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.redirectTo) {
-            store.dispatch(push(nextProps.redirectTo));
+            store.dispatch( push(nextProps.redirectTo) );
             this.props.onRedirect();
         }
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         const token = window.localStorage.getItem('jwt');
         if (token) {
             userService.setToken(token);
         }
 
-        this.props.onLoad(token ? userService.Authorization.current() : null, token);
+        this.props.onLoad(token ? userService.authorization.current() : null, token);
     }
 
     render() {
-        const { currentUser, appName, appLoaded } = this.props;
+        const { currentUser, appLoaded } = this.props;
         if (appLoaded) {
             return (
-                <div>
+                <div className="app">
                     <NavBar
-                        appName={appName}
                         currentUser={currentUser} />
                     <Switch>
                         <Route exact path="/" component={Home}/>
@@ -60,10 +60,8 @@ class App extends React.Component {
             );
         }
         return (
-            <div>
-                <NavBar
-                    appName={appName}
-                    currentUser={currentUser} />
+            <div className="app">
+                <NavBar currentUser={currentUser} />
             </div>
         );
     }

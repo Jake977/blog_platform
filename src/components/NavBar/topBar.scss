@@ -1,0 +1,26 @@
+.topBar {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FFF;
+  height: 80px;
+  padding: 0 22px;
+  margin-bottom: 60px;
+  font-size: 18px;
+  line-height: 28px;
+
+  &__title {
+    flex: 1 1 auto;
+  }
+
+  &__userName {
+    padding: 0 10px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  &__link {
+    padding: 0 10px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+}

@@ -7,7 +7,7 @@ import {
     SIGNUP
 } from './actionTypes';
 
-const promiseMiddleware = store => next => action => {
+const promiseMiddleware = (store) => (next) => (action) => {
     if (isPromise(action.payload)) {
         store.dispatch({ type: ASYNC_START, subtype: action.type });
 
@@ -39,10 +39,8 @@ const promiseMiddleware = store => next => action => {
                 store.dispatch(action);
             }
         );
-
         return;
     }
-
     next(action);
 };
 
@@ -56,12 +54,11 @@ const localStorageMiddleware = (store) => (next) => (action) => {
         window.localStorage.setItem('jwt', '');
         userService.setToken(null);
     }
-
     next(action);
 };
 
-function isPromise(v) {
-    return v && typeof v.then === 'function';
+function isPromise(val) {
+    return val && typeof val.then === 'function';
 }
 
 export { promiseMiddleware, localStorageMiddleware }

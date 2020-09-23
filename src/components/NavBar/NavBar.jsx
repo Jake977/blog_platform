@@ -1,27 +1,40 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import '../../styles.scss';
+import { connect } from 'react-redux';
+import { LOGOUT } from '../../actionTypes';
+import { Button, Avatar } from "antd";
+import userPic from './userDefaultImage.png';
+import './topBar.scss';
 
-const LoggedOutView = (props) => {
+const mapStateToProps = (state) => ({
+    ...state,
+    currentUser: state.mainstate.currentUser
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    onClickLogout: () => dispatch({ type: LOGOUT })
+});
+
+const LoggedOut = (props) => {
     if (!props.currentUser) {
         return (
             <>
-                <NavLink exact to="/" className="nav-link">Home</NavLink>
-                <NavLink to="/login" className="nav-link">Log In</NavLink>
-                <NavLink to="/signup" className="nav-link">Sign Up</NavLink>
+                <NavLink to="/login" className="topBar__link">Log In</NavLink>
+                <NavLink to="/signup" className="topBar__link">Sign Up</NavLink>
             </>
         )
     }
     return null;
 };
 
-const LoggedInView = (props) => {
+const LoggedIn = (props) => {
     if (props.currentUser) {
         return (
             <>
-                <NavLink exact to="/" className="nav-link">Home</NavLink>
-                {props.currentUser.username}
-                <NavLink to="/logout" className="nav-link">Log Out</NavLink>
+                <NavLink exact to="/" className="topBar__link">Create article</NavLink>
+                <div className="topBar__userName">{props.currentUser.username}</div>
+                <Avatar src={userPic} size={46} alt={props.currentUser.username} />
+                <Button style={{ marginLeft: '10px' }} danger onClick={props.onClickLogout}>Log Out</Button>
             </>
         )
     }
@@ -30,28 +43,15 @@ const LoggedInView = (props) => {
 
 class NavBar extends React.Component {
     render() {
-        const { currentUser } = this.props;
+        const { currentUser, onClickLogout } = this.props;
         return (
-            <nav className="navbar">
-                <div className="navbar-nav">
-                    <LoggedOutView currentUser={currentUser} />
-                    <LoggedInView currentUser={currentUser} />
-                </div>
-            </nav>
+            <div className="topBar">
+                <div className="topBar__title">Realworld Blog</div>
+                <LoggedOut currentUser={currentUser} />
+                <LoggedIn currentUser={currentUser} onClickLogout={onClickLogout} />
+            </div>
         );
     }
 }
 
-export default NavBar;
-
-// const NavBar = () => {
-//     return (
-//         <nav className="navbar">
-//             <div className="navbar-nav">
-//                 <NavLink exact to="/" className="nav-link">Home</NavLink>
-//                 <NavLink to="/users" className="nav-link">Users</NavLink>
-//                 <NavLink to="/signup" className="nav-link">Sign Up</NavLink>
-//             </div>
-//         </nav>
-//     );
-// };
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

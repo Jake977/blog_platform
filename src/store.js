@@ -10,7 +10,10 @@ export const history = createBrowserHistory();
 const myRouterMiddleware = routerMiddleware(history);
 
 const getMiddleware = () => applyMiddleware(
-    myRouterMiddleware, promiseMiddleware, localStorageMiddleware, createLogger()
+    myRouterMiddleware,
+    promiseMiddleware,
+    localStorageMiddleware,
+    createLogger(),
 );
 
 export const store = createStore(

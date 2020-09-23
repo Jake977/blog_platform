@@ -1,67 +1,23 @@
-body {
-  background-color: #E5E5E5;
+html {
+  height: 100%;
 }
 
-.app-container {
+body, #root {
+  min-height: 100%;
+  background-color: #EBEEF3;
   min-width: 370px;
 }
 
-.navbar {
-  background-color: #343a40;
-  height: 60px;
-  flex-flow: row nowrap;
-  justify-content: flex-start;
-}
-
-.navbar-nav {
-   padding: 12px 40px;
-}
-
-.nav-link {
-  padding-right: 35px;
-  font-size: 18px;
-  color: #FFFFFF;
+.articlesContainer {
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 48px 32px;
+  box-sizing: border-box;
+  border: 1px solid #D9D9D9;
+  border-radius: 6px;
 }
 
 a {
   cursor: pointer;
 }
-
-.btn-logout {
-  width: 40px;
-  text-align: center;
-  box-sizing: content-box;
-}
-
-.form-container {
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.form-skill-field {
-  margin: 0 0 24px;
-}
-
-.form-skill-input {
-  width: 80%;
-  margin-right: 8px;
-}
-
-.form-skill-icon_minus {
-  margin: 0 8px;
-}
-
-.field-error {
-  color: red;
-}
-
-.form-message {
-  margin-bottom: 30px;
-}
-
-.addSkill-btn {
-  width: 80%;
-}
-
-
 
