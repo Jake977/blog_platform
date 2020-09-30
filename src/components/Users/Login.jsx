@@ -27,8 +27,6 @@ const mapDispatchToProps = dispatch => ({
         const payload = userService.authorization.login(email, password);
         dispatch(actionCreators.doLogIn(payload))
         },
-    onUnload: () =>
-        dispatch(actionCreators.doLoginUnloaded())
 });
 
 class Login extends React.Component {
@@ -39,10 +37,6 @@ class Login extends React.Component {
         this.submitForm = (email, password) => (e) => {
             this.props.onSubmit(email, password);
         };
-    }
-
-    componentWillUnmount() {
-        this.props.onUnload();
     }
 
     render() {

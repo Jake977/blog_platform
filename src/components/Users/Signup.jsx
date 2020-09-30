@@ -29,8 +29,6 @@ const mapDispatchToProps = (dispatch) => ({
         const payload = userService.authorization.signup(username, email, password);
         dispatch(actionCreators.doSignUp(payload))
     },
-    onUnload: () =>
-        dispatch(actionCreators.doSignUpUnloaded())
 });
 
 class Register extends React.Component {
@@ -42,10 +40,6 @@ class Register extends React.Component {
         this.submitForm = (username, email, password) => (e) => {
             this.props.onSubmit(username, email, password);
         }
-    }
-
-    componentWillUnmount() {
-        this.props.onUnload();
     }
 
     render() {
