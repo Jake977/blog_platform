@@ -1,7 +1,7 @@
 import React from 'react';
-import ArticlesList from '../Articles/ArticlesList';
+//import ArticlesList from '../Articles/ArticlesList';
 import { connect } from 'react-redux';
-import { HOME_PAGE_LOADED, HOME_PAGE_UNLOADED } from '../../actionTypes';
+import actionCreators from "../../actionCreators";
 
 const mapStateToProps = (state) => ({
     ...state.home,
@@ -10,13 +10,13 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => ({
     onLoad: (payload) =>
-        dispatch({ type: HOME_PAGE_LOADED }),
+        dispatch(actionCreators.doHomeLoaded()),
     onUnload: () =>
-        dispatch({ type: HOME_PAGE_UNLOADED })
+        dispatch(actionCreators.doHomeUnloaded()),
 });
 
 class Home extends React.Component {
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         this.props.onLoad();
     }
 

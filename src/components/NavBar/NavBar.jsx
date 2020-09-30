@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { LOGOUT } from '../../actionTypes';
 import { Button, Avatar } from "antd";
-import userPic from './userDefaultImage.png';
+import userPic from '../../img/userDefaultImage.png';
 import './topBar.scss';
+import actionCreators from "../../actionCreators";
 
 const mapStateToProps = (state) => ({
     ...state,
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    onClickLogout: () => dispatch({ type: LOGOUT })
+    onClickLogout: () => dispatch(actionCreators.doLogOut()),
 });
 
 const LoggedOut = (props) => {

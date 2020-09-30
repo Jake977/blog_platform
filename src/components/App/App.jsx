@@ -2,7 +2,8 @@ import React from 'react';
 import NavBar from '../NavBar/NavBar';
 import { connect } from 'react-redux';
 import userService from '../../services/userService';
-import { APP_LOAD, REDIRECT } from '../../actionTypes';
+import storageService from "../../services/storageService";
+import actionCreators from "../../actionCreators";
 import { Route, Switch } from 'react-router-dom';
 import Home from '../Home/Home';
 import Login from '../Users/Login';
@@ -21,26 +22,25 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
     onLoad: (payload, token) =>
-        dispatch({ type: APP_LOAD, payload, token, skipTracking: true }),
+        dispatch(actionCreators.doAppLoad(payload, token)),
     onRedirect: () =>
-        dispatch({ type: REDIRECT })
+        dispatch(actionCreators.doRedirect())
 });
 
 class App extends React.Component {
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        if (nextProps.redirectTo) {
-            store.dispatch( push(nextProps.redirectTo) );
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.redirectTo) {
+            store.dispatch( push(prevProps.redirectTo) );
             this.props.onRedirect();
         }
     }
 
-    UNSAFE_componentWillMount() {
-        const token = window.localStorage.getItem('jwt');
+    componentDidMount() {
+        const token = storageService.getFromLocalStorage('jwt');
         if (token) {
             userService.setToken(token);
         }
-
         this.props.onLoad(token ? userService.authorization.current() : null, token);
     }
 
@@ -52,9 +52,9 @@ class App extends React.Component {
                     <NavBar
                         currentUser={currentUser} />
                     <Switch>
-                        <Route exact path="/" component={Home}/>
-                        <Route path="/login" component={Login} />
-                        <Route path="/signup" component={Signup} />
+                        <Route exact path="/" component={Home} />
+                        <Route path="/login" component={!currentUser ? Login : Home} />
+                        <Route path="/signup" component={!currentUser ? Signup : Home} />
                     </Switch>
                 </div>
             );
@@ -68,3 +68,4 @@ class App extends React.Component {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
+

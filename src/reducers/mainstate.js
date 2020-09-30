@@ -38,7 +38,10 @@ export default (state = defaultState, action) => {
         case HOME_PAGE_UNLOADED:
         case LOGIN_PAGE_UNLOADED:
         case SIGNUP_PAGE_UNLOADED:
-            return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };
+            return {
+                ...state,
+                viewChangeCounter: state.viewChangeCounter + 1
+            };
         default:
             return state;
     }

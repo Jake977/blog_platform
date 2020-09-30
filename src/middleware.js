@@ -1,15 +1,11 @@
 import userService from './services/userService';
-import {
-    ASYNC_START,
-    ASYNC_END,
-    LOGIN,
-    LOGOUT,
-    SIGNUP
-} from './actionTypes';
+import storageService from './services/storageService'
+import { SIGNUP, LOGIN, LOGOUT } from './actionTypes';
+import actionCreators from "./actionCreators";
 
 const promiseMiddleware = (store) => (next) => (action) => {
     if (isPromise(action.payload)) {
-        store.dispatch({ type: ASYNC_START, subtype: action.type });
+        store.dispatch(actionCreators.doAsyncStart(action.type));
 
         const currentView = store.getState().viewChangeCounter;
         const skipTracking = action.skipTracking;
@@ -20,13 +16,13 @@ const promiseMiddleware = (store) => (next) => (action) => {
                  if (!skipTracking && currentState.viewChangeCounter !== currentView) {
                      return
                 }
-                console.log('RESULT', res);
+                console.log('RESULT1:', res);
                 action.payload = res;
-                store.dispatch({ type: ASYNC_END, promise: action.payload });
+                store.dispatch(actionCreators.doAsyncEnd(action.payload));
                 store.dispatch(action);
             },
             error => {
-                const currentState = store.getState();
+               const currentState = store.getState();
                 if (!skipTracking && currentState.viewChangeCounter !== currentView) {
                     return
                  }
@@ -34,7 +30,7 @@ const promiseMiddleware = (store) => (next) => (action) => {
                 action.error = true;
                 action.payload = error.response.body;
                 if (!action.skipTracking) {
-                    store.dispatch({ type: ASYNC_END, promise: action.payload });
+                    store.dispatch(actionCreators.doAsyncEnd(action.payload));
                 }
                 store.dispatch(action);
             }
@@ -45,14 +41,16 @@ const promiseMiddleware = (store) => (next) => (action) => {
 };
 
 const localStorageMiddleware = (store) => (next) => (action) => {
+    if (action.type === LOGOUT) {
+        storageService.setToLocalStorage('jwt', '');
+        userService.setToken(null);
+    }
+
     if (action.type === SIGNUP || action.type === LOGIN) {
         if (!action.error) {
-            window.localStorage.setItem('jwt', action.payload.user.token);
+            storageService.setToLocalStorage('jwt', action.payload.user.token);
             userService.setToken(action.payload.user.token);
         }
-    } else if (action.type === LOGOUT) {
-        window.localStorage.setItem('jwt', '');
-        userService.setToken(null);
     }
     next(action);
 };

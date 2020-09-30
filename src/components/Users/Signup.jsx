@@ -4,15 +4,8 @@ import React from 'react';
 import userService from '../../services/userService';
 import { connect } from 'react-redux';
 import './loginForm.scss';
-
-
-import {
-    UPDATE_FIELD_AUTH,
-    SIGNUP,
-    SIGNUP_PAGE_UNLOADED
-} from '../../actionTypes';
-
 import { Form, Input, Button } from 'antd';
+import actionCreators from "../../actionCreators";
 
 const formItemLayout = {
     labelCol: { span: 24},
@@ -27,17 +20,17 @@ const mapStateToProps = (state) => ({ ...state.authorization });
 
 const mapDispatchToProps = (dispatch) => ({
     onChangeUsername: (value) =>
-        dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
+        dispatch(actionCreators.doUpdateFieldAuth('username', value)),
     onChangeEmail: (value) =>
-        dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
+        dispatch(actionCreators.doUpdateFieldAuth('email', value)),
     onChangePassword: (value) =>
-        dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
+        dispatch(actionCreators.doUpdateFieldAuth('password', value)),
     onSubmit: (username, email, password) => {
         const payload = userService.authorization.signup(username, email, password);
-        dispatch({ type: SIGNUP, payload })
+        dispatch(actionCreators.doSignUp(payload))
     },
     onUnload: () =>
-        dispatch({ type: SIGNUP_PAGE_UNLOADED })
+        dispatch(actionCreators.doSignUpUnloaded())
 });
 
 class Register extends React.Component {

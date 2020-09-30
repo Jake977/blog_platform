@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import ErrorsList from '../ErrorsList/ErrorsList';
 import React from 'react';
 import { connect } from 'react-redux';
-import { UPDATE_FIELD_AUTH, LOGIN, LOGIN_PAGE_UNLOADED } from '../../actionTypes';
 import userService from "../../services/userService";
+import actionCreators from '../../actionCreators';
 import { Form, Input, Button } from 'antd';
 import './loginForm.scss';
 
@@ -20,13 +20,15 @@ const formSingleItemLayout = {
 
 const mapDispatchToProps = dispatch => ({
     onChangeEmail: (value) =>
-        dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
+        dispatch(actionCreators.doUpdateFieldAuth('email', value)),
     onChangePassword: (value) =>
-        dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
-    onSubmit: (email, password) =>
-        dispatch({ type: LOGIN, payload: userService.authorization.login(email, password) }),
+        dispatch(actionCreators.doUpdateFieldAuth('password', value)),
+    onSubmit: (email, password) => {
+        const payload = userService.authorization.login(email, password);
+        dispatch(actionCreators.doLogIn(payload))
+        },
     onUnload: () =>
-        dispatch({ type: LOGIN_PAGE_UNLOADED })
+        dispatch(actionCreators.doLoginUnloaded())
 });
 
 class Login extends React.Component {
