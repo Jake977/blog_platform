@@ -6,6 +6,7 @@ import storageService from "../../services/storageService";
 import actionCreators from "../../actionCreators";
 import { Route, Switch } from 'react-router-dom';
 import Home from '../Home/Home';
+import Article from '../Articles/Article';
 import Login from '../Users/Login';
 import Signup from '../Users/Signup';
 import { store } from '../../store';
@@ -55,6 +56,7 @@ class App extends React.Component {
                         <Route exact path="/" component={Home} />
                         <Route path="/login" component={!currentUser ? Login : Home} />
                         <Route path="/signup" component={!currentUser ? Signup : Home} />
+                        <Route path="/article/:id" component={Article} />
                     </Switch>
                 </div>
             );

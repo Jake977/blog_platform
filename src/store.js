@@ -1,5 +1,6 @@
 import { applyMiddleware, createStore } from 'redux';
 import { createLogger } from 'redux-logger';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { promiseMiddleware, localStorageMiddleware } from './middleware';
 import reducer from './reducers/reducers';
 
@@ -13,11 +14,11 @@ const getMiddleware = () => applyMiddleware(
     myRouterMiddleware,
     promiseMiddleware,
     localStorageMiddleware,
-    createLogger(),
+    createLogger()
 );
 
 export const store = createStore(
     reducer(history),
     {},
-    getMiddleware(),
+    composeWithDevTools(getMiddleware()),
 );

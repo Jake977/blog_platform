@@ -46,7 +46,9 @@ class NavBar extends React.Component {
         const { currentUser, onClickLogout } = this.props;
         return (
             <div className="topBar">
-                <div className="topBar__title">Realworld Blog</div>
+                <div className="topBar__title">
+                    <NavLink exact to="/" className="topBar__link">Realworld Blog</NavLink>
+                </div>
                 <LoggedOut currentUser={currentUser} />
                 <LoggedIn currentUser={currentUser} onClickLogout={onClickLogout} />
             </div>

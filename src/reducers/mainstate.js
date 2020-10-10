@@ -4,10 +4,13 @@ import {
     LOGOUT,
     LOGIN,
     SIGNUP,
+    ARTICLE_PAGE_UNLOADED,
+    DELETE_ARTICLE
 } from '../actionTypes';
 
 const defaultState = {
     token: null,
+    viewChangeCounter: 0
 };
 
 export default (state = defaultState, action) => {
@@ -31,6 +34,11 @@ export default (state = defaultState, action) => {
                 token: action.error ? null : action.payload.user.token,
                 currentUser: action.error ? null : action.payload.user
             };
+
+        case DELETE_ARTICLE:
+            return { ...state, redirectTo: '/' };
+        case ARTICLE_PAGE_UNLOADED:
+             return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };
         default:
             return state;
     }
