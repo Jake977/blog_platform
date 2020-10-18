@@ -1,7 +1,5 @@
 import React from 'react';
-import ArticlesList from '../Articles/ArticlesList';
 import MainView from "./MainView";
-import Tags from './Tags';
 import { connect } from 'react-redux';
 import actionCreators from "../../actionCreators";
 import userService from "../../services/userService";
@@ -14,19 +12,22 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onClickTag: (tag, pager, payload) =>
-        dispatch(actionCreators.doFilterByTag(tag, pager, payload)),
-    onLoad: (tab, pager, payload) =>
-        dispatch(actionCreators.doHomeLoaded(tab, pager, payload)),
+    onLoad: (articlesFilter, pager, payload) =>
+        dispatch(actionCreators.doHomeLoaded(articlesFilter, pager, payload)),
     onUnload: () =>
         dispatch(actionCreators.doHomeUnloaded()),
 });
 
 class Home extends React.Component {
+
     componentDidMount()  {
-        const tab = this.props.token ? 'userArticles' : 'all';
-        const articlesPromise = this.props.token ? userService.articles.userArticles : userService.articles.all;
-        this.props.onLoad(tab, articlesPromise, Promise.all([userService.tags.getTags(), articlesPromise()]));
+        //const articlesFilter = this.props.token ? 'userArticles' : 'all';
+        const articlesFilter = 'all';
+        //const articlesPromise = this.props.token ? userService.articles.userArticles : userService.articles.all;
+        const articlesPromise = userService.articles.all;
+        this.props.onLoad(
+            articlesFilter, articlesPromise, Promise.all([userService.tags.getTags(), articlesPromise()])
+        );
     }
 
     componentWillUnmount() {
@@ -34,16 +35,9 @@ class Home extends React.Component {
     }
 
     render() {
-        const {tab, tags, onClickTag} = this.props;
         return (
             <div className="articlesContainer">
-                <MainView  tab={tab} />
-                <div className="">
-                    <div className="sidebar">
-                        <p>Tags</p>
-                        <Tags tags={tags} onClickTag={onClickTag} />
-                    </div>
-                </div>
+                <MainView />
             </div>
         );
     }

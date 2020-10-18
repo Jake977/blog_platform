@@ -13,6 +13,7 @@ import { store } from '../../store';
 import { push } from 'react-router-redux';
 import 'antd/dist/antd.css';
 import '../../styles.scss';
+import ArticleEditor from "../Articles/ArticleEditor";
 
 const mapStateToProps = (state) => {
     return {
@@ -53,10 +54,12 @@ class App extends React.Component {
                     <NavBar
                         currentUser={currentUser} />
                     <Switch>
-                        <Route exact path="/" component={Home} />
-                        <Route path="/login" component={!currentUser ? Login : Home} />
-                        <Route path="/signup" component={!currentUser ? Signup : Home} />
-                        <Route path="/article/:id" component={Article} />
+                        <Route exact path="/" component={ Home } />
+                        <Route path="/login" component={ !currentUser ? Login : Home } />
+                        <Route path="/add" component={ !currentUser ? Login : ArticleEditor } />
+                        <Route path="/article/:id/edit" component={ !currentUser ? Login : ArticleEditor } />
+                        <Route path="/signup" component={ !currentUser ? Signup : Home} />
+                        <Route path="/article/:id" component={ !currentUser ? Login : Article } />
                     </Switch>
                 </div>
             );
@@ -70,4 +73,3 @@ class App extends React.Component {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-

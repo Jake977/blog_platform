@@ -28,12 +28,13 @@ const LoggedOut = (props) => {
 };
 
 const LoggedIn = (props) => {
-    if (props.currentUser) {
+    const currentUser = props.currentUser;
+    if (currentUser) {
         return (
             <>
-                <NavLink exact to="/" className="topBar__link">Create article</NavLink>
-                <div className="topBar__userName">{props.currentUser.username}</div>
-                <Avatar src={userPic} size={46} alt={props.currentUser.username} />
+                <NavLink exact to="/add" className="topBar__link">Create article</NavLink>
+                <div className="topBar__userName">{currentUser.username}</div>
+                <Avatar src={userPic} size={46} alt={currentUser.username} />
                 <Button style={{ marginLeft: '10px' }} danger onClick={props.onClickLogout}>Log Out</Button>
             </>
         )
