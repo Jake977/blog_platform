@@ -3,6 +3,7 @@ import ErrorsList from "../ErrorsList/ErrorsList";
 import userService from "../../services/userService";
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import { useParams } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
 
 import {
@@ -12,6 +13,7 @@ import {
 
 import {store} from "../../store";
 import actionCreators from "../../actionCreators";
+import article from "../../reducers/article";
 
 const formItemLayout = {
     labelCol: {span: 24},
@@ -23,18 +25,15 @@ const formSingleItemLayout = {
 };
 
 const mapStateToProps = state => ({
-    ...state.editor
+    ...state.editor,
 });
+
 
 const mapDispatchToProps = dispatch => ({
     onLoad: payload =>
          dispatch(actionCreators.doEditorLoaded(payload)),
     onUnload: () =>
          dispatch(actionCreators.doEditorUnloaded()),
-    onAddTag: () =>
-        dispatch(actionCreators.doAddTag()),
-    onRemoveTag: tag =>
-        dispatch(actionCreators.doRemoveTag(tag)),
     onUpdateField: (key, value) =>
         dispatch(actionCreators.doUpdateFieldEditor(key, value)),
     onSubmit: (payload, slug) => {
@@ -48,6 +47,7 @@ const mapDispatchToProps = dispatch => ({
 class ArticleEditor extends React.Component {
     constructor(props) {
         super(props);
+        this.id = this.props.match.params.id;
         const updateFieldEvent = (key) =>
             (e) => this.props.onUpdateField(key, e.target.value);
         this.changeTitle = updateFieldEvent('title');
@@ -73,18 +73,19 @@ class ArticleEditor extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.match.params.slug !== prevProps.match.params.slug) {
-            if (prevProps.match.params.slug) {
+        console.log('id', prevProps.match.params.id);
+        if (prevProps.match.params.id !== prevProps.match.params.id) {
+            if (prevProps.match.params.id) {
                 this.props.onUnload();
-                return this.props.onLoad(userService.articles.get(this.props.match.params.slug));
+                return this.props.onLoad(userService.articles.get(this.props.match.params.id));
             }
             this.props.onLoad(null);
         }
     }
 
     componentDidMount() {
-        if (this.props.match.params.slug) {
-            return this.props.onLoad(userService.articles.get(this.props.match.params.slug));
+        if (this.id) {
+            return this.props.onLoad(userService.articles.get(this.id));
         }
         this.props.onLoad(null);
     }
@@ -94,12 +95,15 @@ class ArticleEditor extends React.Component {
     }
 
     render() {
+        const {title, description, body, tagInput, errors} = this.props;
+
+        console.log('title222', this.props.body);
         return (
             <div className="editor-page">
                 <div className="container page">
-                    <div className="row">
+                    <div className="">
                         <div className="">
-                            <ErrorsList errors={this.props.errors}></ErrorsList>
+                            <ErrorsList errors={errors}></ErrorsList>
                             <Form
                                 {...formItemLayout}
                                 onFinish={this.submitForm}
@@ -116,7 +120,7 @@ class ArticleEditor extends React.Component {
                                     ]}
                                 >
                                     <Input
-                                        value={this.props.title}
+                                        value={title}
                                         onChange={this.changeTitle}
                                     />
                                 </Form.Item>
@@ -132,7 +136,7 @@ class ArticleEditor extends React.Component {
                                     ]}
                                 >
                                     <Input
-                                        value={this.props.description}
+                                        value={description}
                                         onChange={this.changeDescription}
                                     />
                                 </Form.Item>
@@ -143,7 +147,7 @@ class ArticleEditor extends React.Component {
 
                                 >
                                     <Input.TextArea
-                                        value={this.props.body}
+                                        value={body}
                                         onChange={this.changeBody}
                                     />
                                 </Form.Item>
@@ -154,7 +158,7 @@ class ArticleEditor extends React.Component {
 
                                 >
                                     <Input
-                                        value={this.props.tagInput}
+                                        value={tagInput}
                                         onChange={this.changeTagInput}
                                     />
                                 </Form.Item>

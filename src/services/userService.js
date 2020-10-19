@@ -3,7 +3,6 @@ import superagent from 'superagent';
 const API_URL = 'https://conduit.productionready.io/api';
 
 const responseBody = (res) => res.body;
-const encode = encodeURIComponent;
 let token = null;
 
 const tokenPlugin = (req) => {
@@ -28,6 +27,8 @@ const requests = {
         superagent.del(`${API_URL}${url}`).use(tokenPlugin).then(responseBody),
     get: url =>
         superagent.get(`${API_URL}${url}`).use(tokenPlugin).then(responseBody),
+    put: (url, body) =>
+        superagent.put(`${API_URL}${url}`, body).use(tokenPlugin).then(responseBody),
     post: (url, body) =>
         superagent.post(`${API_URL}${url}`, body).use(tokenPlugin).then(responseBody)
 };
@@ -52,12 +53,8 @@ const articles = {
         requests.put(`/articles/${article.slug}`, { article: omitSlug(article) }),
     del: slug =>
         requests.del(`/articles/${slug}`),
-    // filterByTag: (tag, page) =>
-    //     requests.get(`/articles?tag=${encode(tag)}&${limit(10, page)}`),
     favorite: slug =>
         requests.post(`/articles/${slug}/favorite`),
-    // favoritedBy: (author, page) =>
-    //     requests.get(`/articles?favorited=${encode(author)}&${limit(5, page)}`),
     unfavorite: slug =>
         requests.del(`/articles/${slug}/favorite`),
 };
