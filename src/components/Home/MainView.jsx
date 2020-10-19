@@ -1,7 +1,5 @@
 import React from "react";
 import ArticlesList from "../Articles/ArticlesList";
-import userService from '../../services/userService';
-import actionCreators from "../../actionCreators";
 import {connect} from 'react-redux';
 
 const mapStateToProps = (state) => ({

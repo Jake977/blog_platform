@@ -29,9 +29,7 @@ class Article extends React.Component {
     }
 
     render() {
-        const {article} = this.props;
-        const {currentUser} = this.props;
-
+        const {article, currentUser} = this.props;
         if (!article) return null;
 
         const canEdit = currentUser && currentUser.username === article.author.username;
@@ -50,7 +48,6 @@ class Article extends React.Component {
                         <div>{article.body}</div>
                     </div>
                 </div>
-
             </div>
         );
     }

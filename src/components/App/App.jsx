@@ -57,7 +57,7 @@ class App extends React.Component {
                         <Route exact path="/" component={ Home } />
                         <Route path="/login" component={ !currentUser ? Login : Home } />
                         <Route path="/add" component={ !currentUser ? Login : ArticleEditor } />
-                        <Route path="/article/:id/edit" component={ !currentUser ? Login : ArticleEditor } />
+                        <Route path="/article/:slug/edit" component={ !currentUser ? Login : ArticleEditor } />
                         <Route path="/signup" component={ !currentUser ? Signup : Home} />
                         <Route path="/article/:id" component={ !currentUser ? Login : Article } />
                     </Switch>

@@ -3,17 +3,10 @@ import ErrorsList from "../ErrorsList/ErrorsList";
 import userService from "../../services/userService";
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { useParams } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
-
-import {
-    ADD_TAG,
-    REMOVE_TAG,
-} from '../../actionTypes';
 
 import {store} from "../../store";
 import actionCreators from "../../actionCreators";
-import article from "../../reducers/article";
 
 const formItemLayout = {
     labelCol: {span: 24},
@@ -45,15 +38,22 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class ArticleEditor extends React.Component {
+    formRef = React.createRef();
     constructor(props) {
         super(props);
-        this.id = this.props.match.params.id;
         const updateFieldEvent = (key) =>
             (e) => this.props.onUpdateField(key, e.target.value);
         this.changeTitle = updateFieldEvent('title');
         this.changeDescription = updateFieldEvent('description');
         this.changeBody = updateFieldEvent('body');
         this.changeTagInput = updateFieldEvent('tagInput');
+
+        this.fillForm = () => {
+            this.formRef.current.setFieldsValue({
+                title: this.props.title,
+                description: this.props.description,
+            });
+        };
 
         this.submitForm = () => {
             const article = {
@@ -73,19 +73,19 @@ class ArticleEditor extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log('id', prevProps.match.params.id);
-        if (prevProps.match.params.id !== prevProps.match.params.id) {
-            if (prevProps.match.params.id) {
+        console.log('slug', prevProps.match.params.slug);
+        if (prevProps.match.params.slug !== prevProps.match.params.slug) {
+            if (prevProps.match.params.slug) {
                 this.props.onUnload();
-                return this.props.onLoad(userService.articles.get(this.props.match.params.id));
+                return this.props.onLoad(userService.articles.get(this.props.match.params.slug));
             }
             this.props.onLoad(null);
         }
     }
 
     componentDidMount() {
-        if (this.id) {
-            return this.props.onLoad(userService.articles.get(this.id));
+        if (this.props.match.params.slug) {
+            return this.props.onLoad(userService.articles.get(this.props.match.params.slug));
         }
         this.props.onLoad(null);
     }
@@ -97,7 +97,7 @@ class ArticleEditor extends React.Component {
     render() {
         const {title, description, body, tagInput, errors} = this.props;
 
-        console.log('title222', this.props.body);
+        console.log('title:', title);
         return (
             <div className="editor-page">
                 <div className="container page">
@@ -106,6 +106,7 @@ class ArticleEditor extends React.Component {
                             <ErrorsList errors={errors}></ErrorsList>
                             <Form
                                 {...formItemLayout}
+                                ref={this.formRef}
                                 onFinish={this.submitForm}
                             >
                                 <Form.Item
@@ -144,7 +145,6 @@ class ArticleEditor extends React.Component {
                                     name="body"
                                     label="Article Text"
                                     placeholder="article text"
-
                                 >
                                     <Input.TextArea
                                         value={body}

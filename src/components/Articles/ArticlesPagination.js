@@ -41,7 +41,6 @@ const ArticlesPagination = (props) => {
                                 className={ isCurrent ? 'pagination-item active' : 'pagination-item' }
                                 onClick={onClick}
                                 key={v.toString()}>
-
                                 <a className="pagination-link" href="">{v + 1}</a>
                             </li>
                         );
