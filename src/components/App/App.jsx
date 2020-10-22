@@ -11,9 +11,9 @@ import Login from '../Users/Login';
 import Signup from '../Users/Signup';
 import { store } from '../../store';
 import { push } from 'react-router-redux';
+import ArticleEditor from "../Articles/ArticleEditor";
 import 'antd/dist/antd.css';
 import '../../styles.scss';
-import ArticleEditor from "../Articles/ArticleEditor";
 
 const mapStateToProps = (state) => {
     return {

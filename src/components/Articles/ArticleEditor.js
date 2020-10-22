@@ -39,6 +39,7 @@ const mapDispatchToProps = dispatch => ({
 
 class ArticleEditor extends React.Component {
     formRef = React.createRef();
+
     constructor(props) {
         super(props);
         const updateFieldEvent = (key) =>
@@ -85,6 +86,7 @@ class ArticleEditor extends React.Component {
 
     componentDidMount() {
         if (this.props.match.params.slug) {
+            this.fillForm();
             return this.props.onLoad(userService.articles.get(this.props.match.params.slug));
         }
         this.props.onLoad(null);
@@ -96,7 +98,6 @@ class ArticleEditor extends React.Component {
 
     render() {
         const {title, description, body, tagInput, errors} = this.props;
-
         console.log('title:', title);
         return (
             <div className="editor-page">
@@ -155,7 +156,6 @@ class ArticleEditor extends React.Component {
                                     name="tags"
                                     label="Tags"
                                     placeholder="Enter tags"
-
                                 >
                                     <Input
                                         value={tagInput}
