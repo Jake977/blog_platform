@@ -88,6 +88,7 @@ class ArticleEditor extends React.Component {
         this.props.onUnload();
     }
 
+
     render() {
         const { errors } = this.props;
         const initialValues = {
