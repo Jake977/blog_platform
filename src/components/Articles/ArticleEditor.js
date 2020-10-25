@@ -49,13 +49,6 @@ class ArticleEditor extends React.Component {
         this.changeBody = updateFieldEvent('body');
         this.changeTagInput = updateFieldEvent('tagInput');
 
-        this.fillForm = () => {
-            this.formRef.current.setFieldsValue({
-                title: this.props.title,
-                description: this.props.description,
-            });
-        };
-
         this.submitForm = () => {
             const article = {
                 title: this.props.title,
@@ -86,7 +79,6 @@ class ArticleEditor extends React.Component {
 
     componentDidMount() {
         if (this.props.match.params.slug) {
-            this.fillForm();
             return this.props.onLoad(userService.articles.get(this.props.match.params.slug));
         }
         this.props.onLoad(null);
@@ -98,7 +90,7 @@ class ArticleEditor extends React.Component {
 
     render() {
         const {title, description, body, tagInput, errors} = this.props;
-        console.log('title:', title);
+        const initialValues = { ...this.props };
         return (
             <div className="editor-page">
                 <div className="container page">
@@ -107,7 +99,7 @@ class ArticleEditor extends React.Component {
                             <ErrorsList errors={errors}></ErrorsList>
                             <Form
                                 {...formItemLayout}
-                                ref={this.formRef}
+                                initialValues={initialValues}
                                 onFinish={this.submitForm}
                             >
                                 <Form.Item
